@@ -9,8 +9,14 @@ export default function YouTube() {
   const dark = '#FFFFFF';
   const light = '#000000';
 
+  // Check if localStorage is available in the current environment
+  const isLocalStorageAvailable =
+    typeof window !== 'undefined' && window.localStorage;
+
   // Check local storage for saved theme preference
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = isLocalStorageAvailable
+    ? localStorage.getItem('theme')
+    : null;
 
   // Set initial theme based on local storage or detected theme
   const initialTheme =
@@ -27,11 +33,11 @@ export default function YouTube() {
   }, [initialTheme]);
 
   useEffect(() => {
-    if (theme) {
+    if (theme && isLocalStorageAvailable) {
       // Save the current theme preference to local storage
       localStorage.setItem('theme', theme);
     }
-  }, [theme]);
+  }, [theme, isLocalStorageAvailable]);
 
   const getSvgFill = () => {
     switch (theme) {
